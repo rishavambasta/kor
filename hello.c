@@ -5,6 +5,8 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Rishav");
 MODULE_DESCRIPTION("Simplest module");
+char *neo = "thomas anderson";
+EXPORT_SYMBOL(neo);
 
 static int __init hello_init(void)
 {
