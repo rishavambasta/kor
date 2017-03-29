@@ -404,7 +404,7 @@ ssize_t scull_write(struct file *filp, const char __user *buf, size_t count,
 
 struct file_operations scull_fops = {
 	.owner =    THIS_MODULE,
-	.llseek =   scull_llseek,
+	.llseek =   NULL,
 	.read =     scull_read,
 	.write =    scull_write,
 	.unlocked_ioctl = NULL,// scull_ioctl,
@@ -426,6 +426,9 @@ void scull_cleanup_module(void)
 	int i;
 	dev_t devno = MKDEV(scull_major, scull_minor);
 
+	
+ 	printk (KERN_INFO "scull: unloading");
+
 	/* Get rid of our char dev entries */
 	if (scull_devices) {
 		for (i = 0; i < scull_nr_devs; i++) {
@@ -443,8 +446,8 @@ void scull_cleanup_module(void)
 	unregister_chrdev_region(devno, scull_nr_devs);
 
 	/* and call the cleanup functions for friend devices */
-	scull_p_cleanup();
-	scull_access_cleanup();
+	//scull_p_cleanup();
+	//scull_access_cleanup();
 
 }
 
@@ -475,6 +478,7 @@ int scull_init_module(void)
  * Get a range of minor numbers to work with, asking for a dynamic
  * major unless directed otherwise at load time.
  */
+ 	printk (KERN_INFO "scull: loading");
 	if (scull_major) {
 		dev = MKDEV(scull_major, scull_minor);
 		result = register_chrdev_region(dev, scull_nr_devs, "scull");
@@ -509,8 +513,8 @@ int scull_init_module(void)
 
         /* At this point call the init function for any friend device */
 	dev = MKDEV(scull_major, scull_minor + scull_nr_devs);
-	dev += scull_p_init(dev);
-	dev += scull_access_init(dev);
+	//dev += scull_p_init(dev);
+	//dev += scull_access_init(dev);
 
 #ifdef SCULL_DEBUG /* only when debugging */
 	scull_create_proc();
