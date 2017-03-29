@@ -8,3 +8,4 @@
 *.mod.o.cmd
 *.o.cmd
 *.tmp_versions
+.*.o.d
